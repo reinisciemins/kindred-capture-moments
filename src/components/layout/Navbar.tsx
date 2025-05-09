@@ -20,14 +20,14 @@ const Navbar = () => {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-8">
-          <Link to="/search" className="font-medium text-foreground hover:text-primary transition-colors">Find Photographers</Link>
-          <Link to="/how-it-works" className="font-medium text-foreground hover:text-primary transition-colors">How It Works</Link>
-          <Link to="/for-photographers" className="font-medium text-foreground hover:text-primary transition-colors">For Photographers</Link>
+          <Link to="/search" className="font-medium text-foreground hover:text-primary transition-colors">Atrast fotogrāfus</Link>
+          <Link to="/how-it-works" className="font-medium text-foreground hover:text-primary transition-colors">Kā tas darbojas</Link>
+          <Link to="/pricing" className="font-medium text-foreground hover:text-primary transition-colors">Cenas</Link>
           <Button asChild variant="ghost">
-            <Link to="/login">Log in</Link>
+            <Link to="/login">Pieslēgties</Link>
           </Button>
           <Button asChild>
-            <Link to="/signup">Sign up</Link>
+            <Link to="/signup">Reģistrēties</Link>
           </Button>
         </div>
 
@@ -42,20 +42,20 @@ const Navbar = () => {
         <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-md z-50 animate-fade-in">
           <div className="container mx-auto py-4 px-4 flex flex-col space-y-4">
             <Link to="/search" className="py-2 font-medium text-foreground hover:text-primary transition-colors">
-              Find Photographers
+              Atrast fotogrāfus
             </Link>
             <Link to="/how-it-works" className="py-2 font-medium text-foreground hover:text-primary transition-colors">
-              How It Works
+              Kā tas darbojas
             </Link>
-            <Link to="/for-photographers" className="py-2 font-medium text-foreground hover:text-primary transition-colors">
-              For Photographers
+            <Link to="/pricing" className="py-2 font-medium text-foreground hover:text-primary transition-colors">
+              Cenas
             </Link>
             <div className="flex flex-col space-y-2 pt-2">
               <Button asChild variant="ghost" className="justify-center">
-                <Link to="/login">Log in</Link>
+                <Link to="/login">Pieslēgties</Link>
               </Button>
               <Button asChild className="justify-center">
-                <Link to="/signup">Sign up</Link>
+                <Link to="/signup">Reģistrēties</Link>
               </Button>
             </div>
           </div>

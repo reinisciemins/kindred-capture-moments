@@ -9,41 +9,41 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-xl font-serif font-medium">Kindred</h3>
             <p className="text-muted-foreground">
-              Connecting families with trusted photographers to capture life's precious moments.
+              Savienojam ģimenes ar uzticamiem fotogrāfiem, lai iemūžinātu dzīves vērtīgos mirkļus.
             </p>
           </div>
 
           <div>
-            <h4 className="font-medium mb-4">Discover</h4>
+            <h4 className="font-medium mb-4">Atklāt</h4>
             <ul className="space-y-2">
-              <li><Link to="/search" className="text-muted-foreground hover:text-primary transition-colors">Find Photographers</Link></li>
-              <li><Link to="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">How It Works</Link></li>
-              <li><Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">Pricing</Link></li>
+              <li><Link to="/search" className="text-muted-foreground hover:text-primary transition-colors">Atrast fotogrāfus</Link></li>
+              <li><Link to="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">Kā tas darbojas</Link></li>
+              <li><Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">Cenas</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-medium mb-4">Information</h4>
+            <h4 className="font-medium mb-4">Informācija</h4>
             <ul className="space-y-2">
-              <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link></li>
-              <li><Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">Tips & Inspiration</Link></li>
-              <li><Link to="/for-photographers" className="text-muted-foreground hover:text-primary transition-colors">For Photographers</Link></li>
+              <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">Par mums</Link></li>
+              <li><Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">Padomi un iedvesma</Link></li>
+              <li><Link to="/for-photographers" className="text-muted-foreground hover:text-primary transition-colors">Fotogrāfiem</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-medium mb-4">Help</h4>
+            <h4 className="font-medium mb-4">Palīdzība</h4>
             <ul className="space-y-2">
-              <li><Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact Us</Link></li>
-              <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
-              <li><Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link></li>
+              <li><Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">Sazināties ar mums</Link></li>
+              <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">Biežāk uzdotie jautājumi</Link></li>
+              <li><Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privātuma politika</Link></li>
+              <li><Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Lietošanas noteikumi</Link></li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} Kindred. All rights reserved.</p>
+          <p className="text-muted-foreground text-sm">© {new Date().getFullYear()} Kindred. Visas tiesības aizsargātas.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
               <span className="sr-only">Instagram</span>

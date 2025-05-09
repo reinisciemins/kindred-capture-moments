@@ -9,6 +9,12 @@ import SearchPage from "./pages/SearchPage";
 import PhotographerProfile from "./pages/PhotographerProfile";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import NotFound from "./pages/NotFound";
+import PricingPage from "./pages/PricingPage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import FAQPage from "./pages/FAQPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +29,12 @@ const App = () => (
           <Route path="/search" element={<SearchPage />} />
           <Route path="/photographer/:id" element={<PhotographerProfile />} />
           <Route path="/how-it-works" element={<HowItWorksPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
