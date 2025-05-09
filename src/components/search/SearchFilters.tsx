@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, Filter, MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,6 +26,14 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Slider } from '@/components/ui/slider';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const photographyTypes = [
   { value: 'family', label: 'Ģimene' },
@@ -39,15 +47,19 @@ interface SearchFiltersProps {
   onSearch: (criteria: any) => void;
   onReset: () => any;
   initialCriteria?: any;
+  locationSuggestions?: string[];
 }
 
-const SearchFilters = ({ onSearch, onReset, initialCriteria }: SearchFiltersProps) => {
+const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions = [] }: SearchFiltersProps) => {
   const [location, setLocation] = useState(initialCriteria?.location || '');
   const [priceRange, setPriceRange] = useState<[number, number]>(initialCriteria?.priceRange || [100, 500]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>(initialCriteria?.type || []);
   const [selectedDate, setSelectedDate] = useState(initialCriteria?.date || 'any');
   const [selectedRating, setSelectedRating] = useState(initialCriteria?.rating || 'any');
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+  
+  const locationRef = useRef<HTMLDivElement>(null);
 
   // Update local state when initialCriteria changes
   useEffect(() => {
@@ -59,6 +71,19 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria }: SearchFiltersProp
       setSelectedRating(initialCriteria.rating || 'any');
     }
   }, [initialCriteria]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (locationRef.current && !locationRef.current.contains(event.target as Node)) {
+        setShowLocationSuggestions(false);
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const toggleType = (type: string) => {
     if (selectedTypes.includes(type)) {
@@ -95,11 +120,17 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria }: SearchFiltersProp
     setIsSheetOpen(false);
   };
 
+  const filteredLocations = location
+    ? locationSuggestions.filter(loc => 
+        loc.toLowerCase().includes(location.toLowerCase())
+      )
+    : locationSuggestions;
+
   return (
     <div className="bg-white shadow-sm rounded-lg p-6 mb-8">
       <div className="flex flex-col lg:flex-row gap-4">
-        {/* Location Search */}
-        <div className="relative flex-grow">
+        {/* Location Search with Autofill */}
+        <div className="relative flex-grow" ref={locationRef}>
           <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
             <MapPin size={18} />
           </div>
@@ -108,8 +139,36 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria }: SearchFiltersProp
             placeholder="Ievadiet pilsētu vai pasta indeksu"
             className="pl-10"
             value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={(e) => {
+              setLocation(e.target.value);
+              if (e.target.value) {
+                setShowLocationSuggestions(true);
+              } else {
+                setShowLocationSuggestions(false);
+              }
+            }}
+            onFocus={() => setShowLocationSuggestions(true)}
           />
+
+          {/* Location suggestions dropdown */}
+          {showLocationSuggestions && filteredLocations.length > 0 && (
+            <div className="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-md border border-gray-200">
+              <ul className="py-1 max-h-60 overflow-auto">
+                {filteredLocations.map((loc, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                    onClick={() => {
+                      setLocation(loc);
+                      setShowLocationSuggestions(false);
+                    }}
+                  >
+                    {loc}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Photography Type Dropdown */}
@@ -125,15 +184,15 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria }: SearchFiltersProp
           <PopoverContent className="w-[200px] p-4">
             <div className="space-y-2">
               {photographyTypes.map((type) => (
-                <div key={type.value} className="flex items-center">
-                  <input
-                    type="checkbox"
+                <div key={type.value} className="flex items-center space-x-2">
+                  <Checkbox 
                     id={`type-${type.value}`}
                     checked={selectedTypes.includes(type.value)}
-                    onChange={() => toggleType(type.value)}
-                    className="mr-2"
+                    onCheckedChange={() => toggleType(type.value)}
                   />
-                  <Label htmlFor={`type-${type.value}`}>{type.label}</Label>
+                  <Label htmlFor={`type-${type.value}`} className="cursor-pointer">
+                    {type.label}
+                  </Label>
                 </div>
               ))}
             </div>
@@ -187,15 +246,15 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria }: SearchFiltersProp
                 <Label>Fotogrāfijas veids</Label>
                 <div className="space-y-2">
                   {photographyTypes.map((type) => (
-                    <div key={type.value} className="flex items-center">
-                      <input
-                        type="checkbox"
+                    <div key={type.value} className="flex items-center space-x-2">
+                      <Checkbox
                         id={`mobile-type-${type.value}`}
                         checked={selectedTypes.includes(type.value)}
-                        onChange={() => toggleType(type.value)}
-                        className="mr-2"
+                        onCheckedChange={() => toggleType(type.value)}
                       />
-                      <Label htmlFor={`mobile-type-${type.value}`}>{type.label}</Label>
+                      <Label htmlFor={`mobile-type-${type.value}`} className="cursor-pointer">
+                        {type.label}
+                      </Label>
                     </div>
                   ))}
                 </div>

@@ -18,18 +18,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 
-// Sample photographer data
+// Sample photographer data - Translated to Latvian
 const samplePhotographer = {
   id: 1,
   name: "Emily Johnson",
-  specialty: "Family & Newborn",
-  location: "San Francisco, CA",
+  specialty: "Ģimene un Jaundzimušie",
+  location: "Rīga, Centrs",
   rating: 4.9,
   reviewCount: 124,
-  price: "$250",
+  price: "€250",
   image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
   verified: true,
-  bio: "I'm a professional photographer with over 8 years of experience specializing in family and newborn photography. My passion lies in capturing the authentic connections and precious moments that make every family unique. With a natural, light-filled aesthetic, I create timeless images that tell your family's story.",
+  bio: "Esmu profesionāla fotogrāfe ar vairāk nekā 8 gadu pieredzi, specializējoties ģimenes un jaundzimušo fotogrāfijās. Mana kaislība ir iemūžināt autentiskās saites un dārgos mirkļus, kas padara katru ģimeni unikālu. Ar dabīgu, gaismas piepildītu estētiku es veidoju mūžīgus attēlus, kas stāsta jūsu ģimenes stāstu.",
   portfolioImages: [
     "https://images.unsplash.com/photo-1479936343636-73cdc5aae0c3?w=500&auto=format&fit=crop&q=60",
     "https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?w=500&auto=format&fit=crop&q=60",
@@ -41,67 +41,67 @@ const samplePhotographer = {
   packages: [
     {
       id: "basic",
-      name: "Family Mini Session",
-      price: "$250",
-      duration: "30 minutes",
+      name: "Ģimenes Mini Sesija",
+      price: "€250",
+      duration: "30 minūtes",
       includes: [
-        "30-minute photo session",
-        "One location",
-        "15 digital images",
-        "Online gallery",
-        "Print release"
+        "30 minūšu fotosesija",
+        "Viena lokācija",
+        "15 digitālie attēli",
+        "Tiešsaistes galerija",
+        "Drukāšanas atļauja"
       ]
     },
     {
       id: "standard",
-      name: "Family Full Session",
-      price: "$450",
-      duration: "1 hour",
+      name: "Ģimenes Pilnā Sesija",
+      price: "€450",
+      duration: "1 stunda",
       includes: [
-        "1-hour photo session",
-        "Up to two locations",
-        "30 digital images",
-        "Online gallery",
-        "Print release",
-        "10 professional prints (5x7)"
+        "1 stundas fotosesija",
+        "Līdz divām lokācijām",
+        "30 digitālie attēli",
+        "Tiešsaistes galerija",
+        "Drukāšanas atļauja",
+        "10 profesionāli fotoattēli (5x7)"
       ]
     },
     {
       id: "premium",
-      name: "Extended Family Session",
-      price: "$650",
-      duration: "90 minutes",
+      name: "Paplašināta Ģimenes Sesija",
+      price: "€650",
+      duration: "90 minūtes",
       includes: [
-        "90-minute photo session",
-        "Multiple locations",
-        "All digital images (50+)",
-        "Online gallery",
-        "Print release",
-        "Custom photo album"
+        "90 minūšu fotosesija",
+        "Vairākas lokācijas",
+        "Visi digitālie attēli (50+)",
+        "Tiešsaistes galerija",
+        "Drukāšanas atļauja",
+        "Pielāgots fotoalbums"
       ]
     }
   ],
   reviews: [
     {
       id: 1,
-      name: "Sarah M.",
+      name: "Linda K.",
       date: "2023-04-15",
       rating: 5,
-      text: "Emily was incredible with our newborn! She was patient, gentle, and captured the most beautiful images. We're so thankful for these precious memories."
+      text: "Emily bija neticama ar mūsu jaundzimušo! Viņa bija pacietīga, maiga un uzņēma visskaistākos attēlus. Mēs esam tik pateicīgi par šīm dārgajām atmiņām."
     },
     {
       id: 2,
-      name: "James and Lisa",
+      name: "Jānis un Anna",
       date: "2023-03-22",
       rating: 5,
-      text: "We had a family session with Emily and were blown away by the results. She made everyone feel comfortable and captured our family dynamic perfectly."
+      text: "Mums bija ģimenes sesija ar Emily, un mēs bijām sajūsmā par rezultātiem. Viņa padarīja visus komfortablus un lieliski uztvēra mūsu ģimenes dinamiku."
     },
     {
       id: 3,
-      name: "Rebecca T.",
+      name: "Liene T.",
       date: "2023-02-18",
       rating: 4,
-      text: "Great experience with Emily. She was professional and the photos turned out beautiful. Only wish we had more time for more variety of shots."
+      text: "Lieliska pieredze ar Emily. Viņa bija profesionāla, un fotogrāfijas izdevās skaistas. Vienīgi vēlētos, lai būtu vairāk laika dažādiem kadriem."
     }
   ],
   availability: {
@@ -117,9 +117,9 @@ const samplePhotographer = {
     ]
   },
   certifications: [
-    "Certified Professional Photographer (CPP)",
-    "Newborn Safety Certified",
-    "Member of Professional Photographers of America"
+    "Sertificēts Profesionāls Fotogrāfs (CPP)",
+    "Jaundzimušo Drošības Sertifikāts",
+    "Profesionālo Fotogrāfu Asociācijas Biedrs"
   ]
 };
 
@@ -146,7 +146,7 @@ const PhotographerProfile = () => {
                 />
                 {photographer.verified && (
                   <Badge className="absolute top-4 right-4 bg-primary text-white">
-                    Verified
+                    Verificēts
                   </Badge>
                 )}
               </div>
@@ -163,14 +163,14 @@ const PhotographerProfile = () => {
                   <div className="flex items-center">
                     <Star className="h-5 w-5 text-amber-500 fill-amber-500" />
                     <span className="ml-1 font-medium">{photographer.rating}</span>
-                    <span className="ml-1 text-muted-foreground">({photographer.reviewCount} reviews)</span>
+                    <span className="ml-1 text-muted-foreground">({photographer.reviewCount} atsauksmes)</span>
                   </div>
                 </div>
                 
                 <p className="mb-6">{photographer.bio}</p>
                 
                 <div className="space-y-4">
-                  <h2 className="text-lg font-medium">Certifications & Credentials</h2>
+                  <h2 className="text-lg font-medium">Sertifikāti un Kvalifikācijas</h2>
                   <ul className="space-y-2">
                     {photographer.certifications.map((cert, i) => (
                       <li key={i} className="flex items-start">
@@ -186,8 +186,8 @@ const PhotographerProfile = () => {
             <Tabs defaultValue="portfolio">
               <TabsList className="grid grid-cols-3 mb-8">
                 <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-                <TabsTrigger value="packages">Packages</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                <TabsTrigger value="packages">Pakalpojumi</TabsTrigger>
+                <TabsTrigger value="reviews">Atsauksmes</TabsTrigger>
               </TabsList>
               
               <TabsContent value="portfolio" className="space-y-8">
@@ -196,7 +196,7 @@ const PhotographerProfile = () => {
                     <div key={i} className="rounded-lg overflow-hidden h-48 sm:h-64">
                       <img 
                         src={image} 
-                        alt={`Portfolio image ${i+1}`}
+                        alt={`Portfolio attēls ${i+1}`}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       />
                     </div>
@@ -231,7 +231,7 @@ const PhotographerProfile = () => {
                           variant={selectedPackage === pkg.id ? "default" : "outline"}
                           onClick={() => setSelectedPackage(pkg.id)}
                         >
-                          {selectedPackage === pkg.id ? 'Selected' : 'Select Package'}
+                          {selectedPackage === pkg.id ? 'Izvēlēts' : 'Izvēlēties pakalpojumu'}
                         </Button>
                       </CardContent>
                     </Card>
@@ -245,7 +245,7 @@ const PhotographerProfile = () => {
                     <div className="flex justify-between mb-2">
                       <h3 className="font-medium">{review.name}</h3>
                       <span className="text-sm text-muted-foreground">
-                        {format(new Date(review.date), 'MMM d, yyyy')}
+                        {format(new Date(review.date), 'dd.MM.yyyy')}
                       </span>
                     </div>
                     <div className="flex mb-3">
@@ -270,10 +270,10 @@ const PhotographerProfile = () => {
           {/* Right column - Booking and contact */}
           <div>
             <div className="bg-white rounded-lg shadow-soft p-6 mb-6 sticky top-24">
-              <h2 className="text-xl font-medium mb-4">Book a Session</h2>
+              <h2 className="text-xl font-medium mb-4">Rezervēt Sesiju</h2>
               
               <div className="mb-6">
-                <h3 className="text-sm font-medium mb-2">Select a date</h3>
+                <h3 className="text-sm font-medium mb-2">Izvēlēties datumu</h3>
                 <CalendarComponent
                   mode="single"
                   selected={date}
@@ -293,26 +293,26 @@ const PhotographerProfile = () => {
               
               {selectedPackage && date ? (
                 <Button className="w-full">
-                  Book Now
+                  Rezervēt Tagad
                 </Button>
               ) : (
                 <Button className="w-full" disabled>
-                  {!selectedPackage ? 'Select a Package' : 'Select a Date'}
+                  {!selectedPackage ? 'Izvēlieties Pakalpojumu' : 'Izvēlieties Datumu'}
                 </Button>
               )}
               
               <div className="text-center mt-4">
                 <p className="text-sm text-muted-foreground">
-                  No payment required until after your session.
+                  Maksājums nav nepieciešams līdz sesijas beigām.
                 </p>
               </div>
             </div>
             
             <div className="bg-white rounded-lg shadow-soft p-6">
-              <h2 className="text-xl font-medium mb-4">Contact Photographer</h2>
+              <h2 className="text-xl font-medium mb-4">Sazināties ar Fotogrāfu</h2>
               <Button variant="outline" className="w-full">
                 <MessageCircle size={18} className="mr-2" />
-                Send Message
+                Sūtīt Ziņu
               </Button>
             </div>
           </div>

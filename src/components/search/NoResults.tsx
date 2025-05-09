@@ -16,7 +16,7 @@ const NoResults = ({ onReset }: NoResultsProps) => {
       <p className="text-muted-foreground mb-6 max-w-md mx-auto">
         Mēs nevarējām atrast nevienu fotogrāfu, kas atbilstu jūsu kritērijiem. Mēģiniet pielāgot filtrus vai meklēt citā teritorijā.
       </p>
-      <Button onClick={onReset}>
+      <Button onClick={() => onReset()}>
         Atiestatīt visus filtrus
       </Button>
     </div>

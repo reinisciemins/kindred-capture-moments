@@ -69,6 +69,21 @@ const samplePhotographers = [
   }
 ];
 
+// Available locations for autofill
+const availableLocations = [
+  "Rīga, Centrs",
+  "Rīga, Āgenskalns",
+  "Rīga, Pārdaugava",
+  "Rīga, Teika",
+  "Jūrmala",
+  "Sigulda",
+  "Ventspils",
+  "Liepāja",
+  "Daugavpils",
+  "Cēsis",
+  "Valmiera"
+];
+
 const SearchPage = () => {
   const [photographers, setPhotographers] = useState(samplePhotographers);
   const [filteredPhotographers, setFilteredPhotographers] = useState(samplePhotographers);
@@ -107,9 +122,18 @@ const SearchPage = () => {
       return price >= criteria.priceRange[0] && price <= criteria.priceRange[1];
     });
     
-    // Filter by rating
+    // Filter by rating - Fixed to properly handle the rating values
     if (criteria.rating && criteria.rating !== 'any') {
-      const ratingValue = parseFloat(criteria.rating.replace('plus', ''));
+      let ratingValue = 0;
+      
+      if (criteria.rating === '4plus') {
+        ratingValue = 4;
+      } else if (criteria.rating === '45plus') {
+        ratingValue = 4.5;
+      } else if (criteria.rating === '5') {
+        ratingValue = 5;
+      }
+      
       filtered = filtered.filter(photographer => photographer.rating >= ratingValue);
     }
     
@@ -141,7 +165,12 @@ const SearchPage = () => {
             Pārlūkojiet un sazinieties ar pārbaudītiem fotogrāfiem jūsu apkārtnē
           </p>
           
-          <SearchFilters onSearch={handleSearch} onReset={resetFilters} initialCriteria={searchCriteria} />
+          <SearchFilters 
+            onSearch={handleSearch} 
+            onReset={resetFilters} 
+            initialCriteria={searchCriteria}
+            locationSuggestions={availableLocations} 
+          />
           
           <div className="space-y-6">
             {filteredPhotographers.length > 0 ? filteredPhotographers.map((photographer) => (
