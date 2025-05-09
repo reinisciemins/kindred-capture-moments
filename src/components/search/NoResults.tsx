@@ -1,9 +1,12 @@
 
 import { Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-const NoResults = () => {
+interface NoResultsProps {
+  onReset: () => void;
+}
+
+const NoResults = ({ onReset }: NoResultsProps) => {
   return (
     <div className="text-center py-12 px-4">
       <div className="bg-secondary/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -13,8 +16,8 @@ const NoResults = () => {
       <p className="text-muted-foreground mb-6 max-w-md mx-auto">
         Mēs nevarējām atrast nevienu fotogrāfu, kas atbilstu jūsu kritērijiem. Mēģiniet pielāgot filtrus vai meklēt citā teritorijā.
       </p>
-      <Button asChild>
-        <Link to="/search">Atiestatīt visus filtrus</Link>
+      <Button onClick={onReset}>
+        Atiestatīt visus filtrus
       </Button>
     </div>
   );

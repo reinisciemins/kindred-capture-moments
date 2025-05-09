@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import SearchFilters from "@/components/search/SearchFilters";
 import PhotographerCard from "@/components/search/PhotographerCard";
@@ -108,12 +108,28 @@ const SearchPage = () => {
     });
     
     // Filter by rating
-    if (criteria.rating) {
+    if (criteria.rating && criteria.rating !== 'any') {
       const ratingValue = parseFloat(criteria.rating.replace('plus', ''));
       filtered = filtered.filter(photographer => photographer.rating >= ratingValue);
     }
     
     setFilteredPhotographers(filtered);
+  };
+
+  const resetFilters = () => {
+    const defaultCriteria = {
+      location: "",
+      type: [] as string[],
+      date: "any",
+      priceRange: [50, 500] as [number, number],
+      rating: "any"
+    };
+    
+    setSearchCriteria(defaultCriteria);
+    setFilteredPhotographers(photographers);
+    
+    // Return the default criteria so SearchFilters component can reset its state
+    return defaultCriteria;
   };
 
   return (
@@ -125,13 +141,13 @@ const SearchPage = () => {
             Pārlūkojiet un sazinieties ar pārbaudītiem fotogrāfiem jūsu apkārtnē
           </p>
           
-          <SearchFilters onSearch={handleSearch} />
+          <SearchFilters onSearch={handleSearch} onReset={resetFilters} initialCriteria={searchCriteria} />
           
           <div className="space-y-6">
             {filteredPhotographers.length > 0 ? filteredPhotographers.map((photographer) => (
               <PhotographerCard key={photographer.id} {...photographer} />
             )) : (
-              <NoResults />
+              <NoResults onReset={resetFilters} />
             )}
           </div>
         </div>

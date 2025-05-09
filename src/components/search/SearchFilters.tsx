@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Filter, MapPin, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -37,14 +37,28 @@ const photographyTypes = [
 
 interface SearchFiltersProps {
   onSearch: (criteria: any) => void;
+  onReset: () => any;
+  initialCriteria?: any;
 }
 
-const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
-  const [location, setLocation] = useState('');
-  const [priceRange, setPriceRange] = useState<[number, number]>([100, 500]);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState('any');
-  const [selectedRating, setSelectedRating] = useState('any');
+const SearchFilters = ({ onSearch, onReset, initialCriteria }: SearchFiltersProps) => {
+  const [location, setLocation] = useState(initialCriteria?.location || '');
+  const [priceRange, setPriceRange] = useState<[number, number]>(initialCriteria?.priceRange || [100, 500]);
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(initialCriteria?.type || []);
+  const [selectedDate, setSelectedDate] = useState(initialCriteria?.date || 'any');
+  const [selectedRating, setSelectedRating] = useState(initialCriteria?.rating || 'any');
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  // Update local state when initialCriteria changes
+  useEffect(() => {
+    if (initialCriteria) {
+      setLocation(initialCriteria.location || '');
+      setPriceRange(initialCriteria.priceRange || [100, 500]);
+      setSelectedTypes(initialCriteria.type || []);
+      setSelectedDate(initialCriteria.date || 'any');
+      setSelectedRating(initialCriteria.rating || 'any');
+    }
+  }, [initialCriteria]);
 
   const toggleType = (type: string) => {
     if (selectedTypes.includes(type)) {
@@ -62,6 +76,23 @@ const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
       priceRange,
       rating: selectedRating
     });
+    
+    // Close the sheet on mobile after search
+    setIsSheetOpen(false);
+  };
+
+  const handleResetFilters = () => {
+    const defaultCriteria = onReset();
+    
+    // Reset all filter states
+    setLocation(defaultCriteria.location);
+    setPriceRange(defaultCriteria.priceRange);
+    setSelectedTypes(defaultCriteria.type);
+    setSelectedDate(defaultCriteria.date);
+    setSelectedRating(defaultCriteria.rating);
+    
+    // Close the sheet on mobile after reset
+    setIsSheetOpen(false);
   };
 
   return (
@@ -110,7 +141,7 @@ const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
         </Popover>
 
         {/* Date Selector */}
-        <Select onValueChange={setSelectedDate} defaultValue="any">
+        <Select value={selectedDate} onValueChange={setSelectedDate}>
           <SelectTrigger className="w-full lg:w-[180px]">
             <div className="flex items-center gap-2">
               <Calendar size={18} />
@@ -127,7 +158,7 @@ const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
         </Select>
 
         {/* Mobile Filters Button */}
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" className="lg:hidden w-full">
               <Filter size={18} className="mr-2" /> Vairāk filtru
@@ -172,7 +203,7 @@ const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
 
               <div className="space-y-2">
                 <Label>Vērtējums</Label>
-                <Select onValueChange={setSelectedRating} defaultValue="any">
+                <Select value={selectedRating} onValueChange={setSelectedRating}>
                   <SelectTrigger>
                     <SelectValue placeholder="Jebkurš vērtējums" />
                   </SelectTrigger>
@@ -185,8 +216,11 @@ const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
                 </Select>
               </div>
             </div>
-            <SheetFooter>
+            <SheetFooter className="flex flex-col space-y-2">
               <Button className="w-full" onClick={handleSearchClick}>Pielietot filtrus</Button>
+              <Button variant="outline" className="w-full" onClick={handleResetFilters}>
+                Atiestatīt visus filtrus
+              </Button>
             </SheetFooter>
           </SheetContent>
         </Sheet>
@@ -213,7 +247,7 @@ const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
               
               <div className="space-y-2">
                 <Label>Vērtējums</Label>
-                <Select onValueChange={setSelectedRating} defaultValue="any">
+                <Select value={selectedRating} onValueChange={setSelectedRating}>
                   <SelectTrigger>
                     <SelectValue placeholder="Jebkurš vērtējums" />
                   </SelectTrigger>
@@ -224,6 +258,15 @@ const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
                     <SelectItem value="5">5 zvaigznes</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+              
+              <div className="flex justify-between space-x-2">
+                <Button variant="outline" className="flex-1" onClick={handleResetFilters}>
+                  Atiestatīt
+                </Button>
+                <Button className="flex-1" onClick={handleSearchClick}>
+                  Pielietot
+                </Button>
               </div>
             </div>
           </PopoverContent>
