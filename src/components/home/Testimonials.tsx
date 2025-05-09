@@ -5,23 +5,23 @@ import { Card, CardContent } from "@/components/ui/card";
 const testimonials = [
   {
     id: 1,
-    quote: "We found the most amazing photographer for our family photos. The process was so simple and the results were beyond what I could have hoped for!",
-    author: "Sarah M.",
-    role: "Mother of two",
+    quote: "Mēs atradām vispārsteidzošāko fotogrāfu mūsu ģimenes fotogrāfijām. Process bija tik vienkāršs, un rezultāti pārspēja manas cerības!",
+    author: "Sanda M.",
+    role: "Divu bērnu māte",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
   },
   {
     id: 2,
-    quote: "As a busy mom, I appreciated how easy it was to find a photographer who fit our style and schedule. Our photos are perfect!",
-    author: "Jessica T.",
-    role: "Mother of three",
+    quote: "Kā aizņemtai mammai, es novērtēju, cik viegli bija atrast fotogrāfu, kurš atbilda mūsu stilam un grafikam. Mūsu fotogrāfijas ir ideālas!",
+    author: "Jekaterina T.",
+    role: "Trīs bērnu māte",
     image: "https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
   },
   {
     id: 3,
-    quote: "Kindred made it so easy to find the right photographer for our maternity photos. The transparent pricing meant no surprises.",
+    quote: "Kindred padarīja tik vienkāršu pareizā fotogrāfa atrašanu mūsu grūtniecības fotogrāfijām. Caurspīdīgās cenas nozīmēja, ka nebija nekādu pārsteigumu.",
     author: "Laura K.",
-    role: "Expecting mother",
+    role: "Topošā māmiņa",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
   }
 ];
@@ -31,9 +31,9 @@ const Testimonials = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-medium mb-4">What Families Say</h2>
+          <h2 className="text-3xl md:text-4xl font-serif font-medium mb-4">Ko saka ģimenes</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Real stories from families who found their perfect photographer through Kindred
+            Īsti stāsti no ģimenēm, kas atradušas savu ideālo fotogrāfu ar Kindred palīdzību
           </p>
         </div>
 

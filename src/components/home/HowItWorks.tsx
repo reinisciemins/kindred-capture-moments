@@ -4,18 +4,18 @@ import { CalendarCheck, Heart, Search } from 'lucide-react';
 const steps = [
   {
     icon: <Search className="w-10 h-10 text-primary" />,
-    title: "Find the Perfect Photographer",
-    description: "Browse profiles of verified photographers in your area. Filter by style, price, and availability to find your perfect match."
+    title: "Atrodiet ideālo fotogrāfu",
+    description: "Pārlūkojiet pārbaudītu fotogrāfu profilus jūsu apkārtnē. Filtrējiet pēc stila, cenas un pieejamības, lai atrastu ideālo atbilstību."
   },
   {
     icon: <CalendarCheck className="w-10 h-10 text-primary" />,
-    title: "Book with Confidence",
-    description: "See real-time availability, transparent pricing, and instant booking confirmation. No hidden fees, ever."
+    title: "Rezervējiet ar pārliecību",
+    description: "Redziet reāllaika pieejamību, caurspīdīgas cenas un tūlītēju rezervācijas apstiprinājumu. Bez slēptām maksām, nekad."
   },
   {
     icon: <Heart className="w-10 h-10 text-primary" />,
-    title: "Create Beautiful Memories",
-    description: "Enjoy your session with a trusted professional who understands how to capture your family's unique spirit."
+    title: "Radiet skaistas atmiņas",
+    description: "Izbaudiet sesiju ar uzticamu profesionāli, kurš saprot, kā iemūžināt jūsu ģimenes unikālo garu."
   }
 ];
 
@@ -24,9 +24,9 @@ const HowItWorks = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-medium mb-4">How Kindred Works</h2>
+          <h2 className="text-3xl md:text-4xl font-serif font-medium mb-4">Kā darbojas Kindred</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We make finding and booking the perfect family photographer simple and stress-free.
+            Mēs padarām ideālā ģimenes fotogrāfa atrašanu un rezervēšanu vienkāršu un bez stresa.
           </p>
         </div>
 

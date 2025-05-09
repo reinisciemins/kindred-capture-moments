@@ -8,34 +8,34 @@ import { Link } from 'react-router-dom';
 const photographers = [
   {
     id: 1,
-    name: "Emily Johnson",
-    specialty: "Family & Newborn",
-    location: "San Francisco, CA",
+    name: "Līga Kļaviņa",
+    specialty: "Ģimene un Jaundzimušie",
+    location: "Rīga",
     rating: 4.9,
     reviewCount: 124,
-    price: "$250",
+    price: "€250",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     verified: true
   },
   {
     id: 2,
-    name: "Michael Chen",
-    specialty: "Family & Maternity",
-    location: "New York, NY",
+    name: "Jānis Bērziņš",
+    specialty: "Ģimene un Grūtniecība",
+    location: "Jūrmala",
     rating: 4.8,
     reviewCount: 98,
-    price: "$300",
+    price: "€300",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     verified: true
   },
   {
     id: 3,
-    name: "Sophia Martinez",
-    specialty: "Children & Family",
-    location: "Austin, TX",
+    name: "Anna Zariņa",
+    specialty: "Bērni un Ģimene",
+    location: "Sigulda",
     rating: 5.0,
     reviewCount: 87,
-    price: "$200",
+    price: "€200",
     image: "https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     verified: true
   }
@@ -46,9 +46,9 @@ const FeaturedPhotographers = () => {
     <section className="py-20 bg-secondary/50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-serif font-medium mb-4">Featured Photographers</h2>
+          <h2 className="text-3xl md:text-4xl font-serif font-medium mb-4">Izceltie fotogrāfi</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover our hand-picked selection of trusted family photographers
+            Atklājiet mūsu izraudzīto uzticamo ģimeņu fotogrāfu izlasi
           </p>
         </div>
 
@@ -64,7 +64,7 @@ const FeaturedPhotographers = () => {
                   />
                   {photographer.verified && (
                     <Badge className="absolute top-4 right-4 bg-primary text-white">
-                      Verified
+                      Pārbaudīts
                     </Badge>
                   )}
                 </div>
@@ -77,7 +77,7 @@ const FeaturedPhotographers = () => {
                       <span className="ml-1 text-sm font-medium">{photographer.rating}</span>
                       <span className="ml-1 text-sm text-muted-foreground">({photographer.reviewCount})</span>
                     </div>
-                    <span className="font-medium">From {photographer.price}</span>
+                    <span className="font-medium">Sākot no {photographer.price}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -90,7 +90,7 @@ const FeaturedPhotographers = () => {
             to="/search" 
             className="inline-flex items-center text-primary font-medium hover:text-primary/80 transition-colors"
           >
-            View all photographers 
+            Skatīt visus fotogrāfus 
             <svg className="ml-2 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clipRule="evenodd" />
             </svg>

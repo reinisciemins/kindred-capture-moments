@@ -20,25 +20,31 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetFooter,
 } from '@/components/ui/sheet';
 import { Slider } from '@/components/ui/slider';
 
 const photographyTypes = [
-  { value: 'family', label: 'Family' },
-  { value: 'newborn', label: 'Newborn' },
-  { value: 'maternity', label: 'Maternity' },
-  { value: 'children', label: 'Children' },
-  { value: 'engagement', label: 'Engagement' },
+  { value: 'family', label: 'Ģimene' },
+  { value: 'newborn', label: 'Jaundzimušie' },
+  { value: 'maternity', label: 'Grūtniecība' },
+  { value: 'children', label: 'Bērni' },
+  { value: 'engagement', label: 'Saderināšanās' },
 ];
 
-const SearchFilters = () => {
+interface SearchFiltersProps {
+  onSearch: (criteria: any) => void;
+}
+
+const SearchFilters = ({ onSearch }: SearchFiltersProps) => {
   const [location, setLocation] = useState('');
-  const [priceRange, setPriceRange] = useState([100, 500]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([100, 500]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState('any');
+  const [selectedRating, setSelectedRating] = useState('any');
 
   const toggleType = (type: string) => {
     if (selectedTypes.includes(type)) {
@@ -46,6 +52,16 @@ const SearchFilters = () => {
     } else {
       setSelectedTypes([...selectedTypes, type]);
     }
+  };
+
+  const handleSearchClick = () => {
+    onSearch({
+      location,
+      type: selectedTypes,
+      date: selectedDate,
+      priceRange,
+      rating: selectedRating
+    });
   };
 
   return (
@@ -58,7 +74,7 @@ const SearchFilters = () => {
           </div>
           <Input
             type="text"
-            placeholder="Enter city or zip code"
+            placeholder="Ievadiet pilsētu vai pasta indeksu"
             className="pl-10"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
@@ -69,9 +85,9 @@ const SearchFilters = () => {
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" className="w-full lg:w-auto justify-between gap-2">
-              <span>Photography Type</span>
+              <span>Fotogrāfijas veids</span>
               <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                {selectedTypes.length || 'All'}
+                {selectedTypes.length || 'Visi'}
               </span>
             </Button>
           </PopoverTrigger>
@@ -94,19 +110,19 @@ const SearchFilters = () => {
         </Popover>
 
         {/* Date Selector */}
-        <Select>
+        <Select onValueChange={setSelectedDate} defaultValue="any">
           <SelectTrigger className="w-full lg:w-[180px]">
             <div className="flex items-center gap-2">
               <Calendar size={18} />
-              <SelectValue placeholder="Any Date" />
+              <SelectValue placeholder="Jebkurš datums" />
             </div>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="any">Any Date</SelectItem>
-            <SelectItem value="this-week">This Week</SelectItem>
-            <SelectItem value="this-month">This Month</SelectItem>
-            <SelectItem value="next-month">Next Month</SelectItem>
-            <SelectItem value="custom">Custom Date</SelectItem>
+            <SelectItem value="any">Jebkurš datums</SelectItem>
+            <SelectItem value="this-week">Šī nedēļa</SelectItem>
+            <SelectItem value="this-month">Šis mēnesis</SelectItem>
+            <SelectItem value="next-month">Nākamais mēnesis</SelectItem>
+            <SelectItem value="custom">Izvēlēts datums</SelectItem>
           </SelectContent>
         </Select>
 
@@ -114,30 +130,30 @@ const SearchFilters = () => {
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" className="lg:hidden w-full">
-              <Filter size={18} className="mr-2" /> More Filters
+              <Filter size={18} className="mr-2" /> Vairāk filtru
             </Button>
           </SheetTrigger>
           <SheetContent>
             <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
+              <SheetTitle>Filtri</SheetTitle>
               <SheetDescription>
-                Refine your search with additional filters.
+                Precizējiet meklēšanu ar papildu filtriem.
               </SheetDescription>
             </SheetHeader>
             <div className="py-6 space-y-6">
               <div className="space-y-2">
-                <Label>Price Range (${priceRange[0]} - ${priceRange[1]})</Label>
+                <Label>Cenu diapazons (€{priceRange[0]} - €{priceRange[1]})</Label>
                 <Slider
-                  defaultValue={priceRange}
+                  value={priceRange}
                   max={1000}
                   min={50}
                   step={50}
-                  onValueChange={(value) => setPriceRange(value as number[])}
+                  onValueChange={(value) => setPriceRange(value as [number, number])}
                 />
               </div>
               
               <div className="space-y-2">
-                <Label>Photography Type</Label>
+                <Label>Fotogrāfijas veids</Label>
                 <div className="space-y-2">
                   {photographyTypes.map((type) => (
                     <div key={type.value} className="flex items-center">
@@ -153,9 +169,24 @@ const SearchFilters = () => {
                   ))}
                 </div>
               </div>
+
+              <div className="space-y-2">
+                <Label>Vērtējums</Label>
+                <Select onValueChange={setSelectedRating} defaultValue="any">
+                  <SelectTrigger>
+                    <SelectValue placeholder="Jebkurš vērtējums" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="any">Jebkurš vērtējums</SelectItem>
+                    <SelectItem value="4plus">4+ zvaigznes</SelectItem>
+                    <SelectItem value="45plus">4.5+ zvaigznes</SelectItem>
+                    <SelectItem value="5">5 zvaigznes</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <SheetFooter>
-              <Button className="w-full">Apply Filters</Button>
+              <Button className="w-full" onClick={handleSearchClick}>Pielietot filtrus</Button>
             </SheetFooter>
           </SheetContent>
         </Sheet>
@@ -164,33 +195,33 @@ const SearchFilters = () => {
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline" className="hidden lg:flex">
-              <Filter size={18} className="mr-2" /> More Filters
+              <Filter size={18} className="mr-2" /> Vairāk filtru
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[300px] p-4">
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label>Price Range (${priceRange[0]} - ${priceRange[1]})</Label>
+                <Label>Cenu diapazons (€{priceRange[0]} - €{priceRange[1]})</Label>
                 <Slider
-                  defaultValue={priceRange}
+                  value={priceRange}
                   max={1000}
                   min={50}
                   step={50}
-                  onValueChange={(value) => setPriceRange(value as number[])}
+                  onValueChange={(value) => setPriceRange(value as [number, number])}
                 />
               </div>
               
               <div className="space-y-2">
-                <Label>Rating</Label>
-                <Select>
+                <Label>Vērtējums</Label>
+                <Select onValueChange={setSelectedRating} defaultValue="any">
                   <SelectTrigger>
-                    <SelectValue placeholder="Any Rating" />
+                    <SelectValue placeholder="Jebkurš vērtējums" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="any">Any Rating</SelectItem>
-                    <SelectItem value="4plus">4+ Stars</SelectItem>
-                    <SelectItem value="45plus">4.5+ Stars</SelectItem>
-                    <SelectItem value="5">5 Stars</SelectItem>
+                    <SelectItem value="any">Jebkurš vērtējums</SelectItem>
+                    <SelectItem value="4plus">4+ zvaigznes</SelectItem>
+                    <SelectItem value="45plus">4.5+ zvaigznes</SelectItem>
+                    <SelectItem value="5">5 zvaigznes</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -199,9 +230,9 @@ const SearchFilters = () => {
         </Popover>
 
         {/* Search Button */}
-        <Button className="w-full lg:w-auto">
+        <Button className="w-full lg:w-auto" onClick={handleSearchClick}>
           <Search size={18} className="mr-2" />
-          Search
+          Meklēt
         </Button>
       </div>
     </div>
