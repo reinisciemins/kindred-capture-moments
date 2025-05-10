@@ -58,6 +58,7 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions
   const [selectedRating, setSelectedRating] = useState(initialCriteria?.rating || 'any');
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   
   const locationRef = useRef<HTMLDivElement>(null);
 
@@ -102,8 +103,9 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions
       rating: selectedRating
     });
     
-    // Close the sheet on mobile after search
+    // Close the sheet and popover after search
     setIsSheetOpen(false);
+    setIsPopoverOpen(false);
   };
 
   const handleResetFilters = () => {
@@ -116,8 +118,9 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions
     setSelectedDate(defaultCriteria.date || 'any');
     setSelectedRating(defaultCriteria.rating || 'any');
     
-    // Close the sheet on mobile after reset
+    // Close the sheet and popover after reset
     setIsSheetOpen(false);
+    setIsPopoverOpen(false);
   };
 
   const filteredLocations = location
@@ -285,7 +288,7 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions
         </Sheet>
 
         {/* Desktop Filters Button */}
-        <Popover>
+        <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
           <PopoverTrigger asChild>
             <Button variant="outline" className="hidden lg:flex">
               <Filter size={18} className="mr-2" /> Vairāk filtru
