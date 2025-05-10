@@ -110,11 +110,11 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions
     const defaultCriteria = onReset();
     
     // Reset all filter states
-    setLocation(defaultCriteria.location);
-    setPriceRange(defaultCriteria.priceRange);
-    setSelectedTypes(defaultCriteria.type);
-    setSelectedDate(defaultCriteria.date);
-    setSelectedRating(defaultCriteria.rating);
+    setLocation(defaultCriteria.location || '');
+    setPriceRange(defaultCriteria.priceRange || [50, 500]);
+    setSelectedTypes(defaultCriteria.type || []);
+    setSelectedDate(defaultCriteria.date || 'any');
+    setSelectedRating(defaultCriteria.rating || 'any');
     
     // Close the sheet on mobile after reset
     setIsSheetOpen(false);
@@ -216,7 +216,7 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions
           </SelectContent>
         </Select>
 
-        {/* Mobile Filters Button */}
+        {/* Mobile Filters Sheet */}
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" className="lg:hidden w-full">

@@ -17,7 +17,8 @@ const samplePhotographers = [
     price: "€250",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     verified: true,
-    description: "Specializējos dabiskā apgaismojuma fotogrāfijā, kas iemūžina autentiskus ģimenes mirkļus. Vairāk nekā 8 gadu pieredze darbā ar ģimenēm un jaundzimušajiem."
+    description: "Specializējos dabiskā apgaismojuma fotogrāfijā, kas iemūžina autentiskus ģimenes mirkļus. Vairāk nekā 8 gadu pieredze darbā ar ģimenēm un jaundzimušajiem.",
+    availableDates: ["2025-05-15", "2025-05-16", "2025-05-20", "2025-05-25", "2025-05-30"]
   },
   {
     id: 2,
@@ -29,7 +30,8 @@ const samplePhotographers = [
     price: "€300",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     verified: true,
-    description: "Godalgots fotogrāfs, kas rada mākslinieciskus ģimenes portretus ar mūsdienīgu pieskārienu. Iemūžinu grūtniecības skaistumu un ģimenes saites."
+    description: "Godalgots fotogrāfs, kas rada mākslinieciskus ģimenes portretus ar mūsdienīgu pieskārienu. Iemūžinu grūtniecības skaistumu un ģimenes saites.",
+    availableDates: ["2025-05-12", "2025-05-13", "2025-05-22", "2025-05-23", "2025-06-05"]
   },
   {
     id: 3,
@@ -41,7 +43,8 @@ const samplePhotographers = [
     price: "€200",
     image: "https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     verified: true,
-    description: "Jautras un aizraujošas fotosesijas, kas patīk bērniem! Radošas un spontānas ģimenes fotosesijas, kas atklāj patiesas personības un emocijas."
+    description: "Jautras un aizraujošas fotosesijas, kas patīk bērniem! Radošas un spontānas ģimenes fotosesijas, kas atklāj patiesas personības un emocijas.",
+    availableDates: ["2025-05-10", "2025-05-11", "2025-05-17", "2025-05-18", "2025-05-24"]
   },
   {
     id: 4,
@@ -53,7 +56,8 @@ const samplePhotographers = [
     price: "€275",
     image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     verified: true,
-    description: "Dokumentālā stila fotogrāfija, kas stāsta jūsu ģimenes unikālo stāstu. Specializējos spontānu mirkļu tveršanā īpašu notikumu un ikdienas dzīves laikā."
+    description: "Dokumentālā stila fotogrāfija, kas stāsta jūsu ģimenes unikālo stāstu. Specializējos spontānu mirkļu tveršanā īpašu notikumu un ikdienas dzīves laikā.",
+    availableDates: ["2025-05-12", "2025-05-19", "2025-05-26", "2025-06-02", "2025-06-09"]
   },
   {
     id: 5,
@@ -65,7 +69,8 @@ const samplePhotographers = [
     price: "€325",
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
     verified: true,
-    description: "Veidoju sapņainus, mākslinieciskus portretus topošajām māmiņām un jaundzimušajiem. Apmācīta drošai jaundzimušo pozēšanai, ar mājīgu, pilnībā aprīkotu studiju."
+    description: "Veidoju sapņainus, mākslinieciskus portretus topošajām māmiņām un jaundzimušajiem. Apmācīta drošai jaundzimušo pozēšanai, ar mājīgu, pilnībā aprīkotu studiju.",
+    availableDates: ["2025-05-14", "2025-05-21", "2025-05-28", "2025-06-04", "2025-06-11"]
   }
 ];
 
@@ -84,19 +89,44 @@ const availableLocations = [
   "Valmiera"
 ];
 
+// Parse date based on selected filter option
+const getDateRange = (dateFilter: string): { start: Date | null, end: Date | null } => {
+  const currentDate = new Date();
+  const result = { start: null, end: null };
+  
+  if (dateFilter === 'this-week') {
+    result.start = new Date();
+    result.end = new Date();
+    result.end.setDate(currentDate.getDate() + 7);
+  } else if (dateFilter === 'this-month') {
+    result.start = new Date();
+    result.end = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+  } else if (dateFilter === 'next-month') {
+    result.start = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    result.end = new Date(currentDate.getFullYear(), currentDate.getMonth() + 2, 0);
+  } else if (dateFilter === 'custom' && typeof dateFilter === 'string' && dateFilter.match(/^\d{4}-\d{2}-\d{2}$/)) {
+    // If a custom date is provided in YYYY-MM-DD format
+    result.start = new Date(dateFilter);
+    result.end = new Date(dateFilter);
+  }
+  
+  return result;
+};
+
 const SearchPage = () => {
   const [photographers, setPhotographers] = useState(samplePhotographers);
   const [filteredPhotographers, setFilteredPhotographers] = useState(samplePhotographers);
   const [searchCriteria, setSearchCriteria] = useState({
     location: "",
     type: [] as string[],
-    date: "",
+    date: "any",
     priceRange: [50, 500] as [number, number],
-    rating: ""
+    rating: "any"
   });
 
   const handleSearch = (criteria: any) => {
     setSearchCriteria(criteria);
+    console.log("Search criteria:", criteria);
     
     let filtered = [...photographers];
     
@@ -116,13 +146,27 @@ const SearchPage = () => {
       });
     }
     
+    // Filter by date
+    if (criteria.date && criteria.date !== 'any') {
+      const dateRange = getDateRange(criteria.date);
+      
+      if (dateRange.start && dateRange.end) {
+        filtered = filtered.filter(photographer => {
+          return photographer.availableDates && photographer.availableDates.some(dateStr => {
+            const date = new Date(dateStr);
+            return date >= dateRange.start! && date <= dateRange.end!;
+          });
+        });
+      }
+    }
+    
     // Filter by price range
     filtered = filtered.filter(photographer => {
       const price = parseInt(photographer.price.replace(/[^0-9]/g, ''));
       return price >= criteria.priceRange[0] && price <= criteria.priceRange[1];
     });
     
-    // Filter by rating - Fixed to properly handle the rating values
+    // Filter by rating
     if (criteria.rating && criteria.rating !== 'any') {
       let ratingValue = 0;
       
