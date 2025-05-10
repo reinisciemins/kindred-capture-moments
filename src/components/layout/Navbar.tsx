@@ -1,14 +1,40 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, X, User, LogOut } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    toast.success("Veiksmīga izrakstīšanās");
+    navigate("/");
   };
 
   return (
@@ -23,12 +49,38 @@ const Navbar = () => {
           <Link to="/search" className="font-medium text-foreground hover:text-primary transition-colors">Atrast fotogrāfus</Link>
           <Link to="/how-it-works" className="font-medium text-foreground hover:text-primary transition-colors">Kā tas darbojas</Link>
           <Link to="/pricing" className="font-medium text-foreground hover:text-primary transition-colors">Cenas</Link>
-          <Button asChild variant="ghost">
-            <Link to="/login">Pieslēgties</Link>
-          </Button>
-          <Button asChild>
-            <Link to="/signup">Reģistrēties</Link>
-          </Button>
+          
+          {!user ? (
+            <>
+              <Button asChild variant="ghost">
+                <Link to="/login">Pieslēgties</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/signup">Reģistrēties</Link>
+              </Button>
+            </>
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Mans konts</DropdownMenuLabel>
+                <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link to="/dashboard" className="cursor-pointer">Kontrolpanelis</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Izrakstīties</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -51,12 +103,25 @@ const Navbar = () => {
               Cenas
             </Link>
             <div className="flex flex-col space-y-2 pt-2">
-              <Button asChild variant="ghost" className="justify-center">
-                <Link to="/login">Pieslēgties</Link>
-              </Button>
-              <Button asChild className="justify-center">
-                <Link to="/signup">Reģistrēties</Link>
-              </Button>
+              {!user ? (
+                <>
+                  <Button asChild variant="ghost" className="justify-center">
+                    <Link to="/login">Pieslēgties</Link>
+                  </Button>
+                  <Button asChild className="justify-center">
+                    <Link to="/signup">Reģistrēties</Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild variant="ghost" className="justify-center">
+                    <Link to="/dashboard">Kontrolpanelis</Link>
+                  </Button>
+                  <Button variant="ghost" onClick={handleLogout} className="justify-center">
+                    Izrakstīties
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,6 @@
+
 import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return <footer className="bg-secondary py-12 mt-16">
       <div className="container mx-auto px-4">
@@ -55,4 +57,5 @@ const Footer = () => {
       </div>
     </footer>;
 };
+
 export default Footer;
