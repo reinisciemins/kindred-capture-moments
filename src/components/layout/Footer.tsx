@@ -23,7 +23,7 @@ const Footer = () => {
             <h4 className="font-medium mb-4">Informācija</h4>
             <ul className="space-y-2">
               <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">Par mums</Link></li>
-              <li><Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">Padomi un iedvesma</Link></li>
+              
               <li><Link to="/for-photographers" className="text-muted-foreground hover:text-primary transition-colors">Fotogrāfiem</Link></li>
             </ul>
           </div>
