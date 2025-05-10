@@ -1,9 +1,9 @@
 
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { 
-  Calendar,
+  Calendar as CalendarIcon,
   Star,
   MessageCircle, 
   MapPin, 
@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { toast } from "sonner";
 
 // Sample photographer data - Translated to Latvian
 const samplePhotographer = {
@@ -123,13 +124,64 @@ const samplePhotographer = {
   ]
 };
 
+// More sample photographers with Latvian data
+const photographers = [
+  samplePhotographer,
+  {
+    ...samplePhotographer,
+    id: 2,
+    name: "Mārtiņš Bērziņš",
+    specialty: "Kāzas un Portreti",
+    location: "Jūrmala",
+    rating: 4.8,
+    reviewCount: 98,
+    price: "€350",
+  },
+  {
+    ...samplePhotographer,
+    id: 3,
+    name: "Anna Liepiņa",
+    specialty: "Jaundzimušie un Bērni",
+    location: "Sigulda",
+    rating: 4.7,
+    reviewCount: 87,
+    price: "€280",
+  }
+];
+
 const PhotographerProfile = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [date, setDate] = useState<Date | undefined>();
 
-  // In a real app, we would fetch the photographer data based on the ID
-  const photographer = samplePhotographer;
+  // Find the photographer based on the ID
+  const photographer = photographers.find(p => p.id === parseInt(id || "1")) || photographers[0];
+
+  const handleBookSession = () => {
+    if (selectedPackage && date) {
+      // Store booking details in sessionStorage
+      const bookingDetails = {
+        photographerId: photographer.id,
+        photographerName: photographer.name,
+        packageId: selectedPackage,
+        packageName: photographer.packages.find(pkg => pkg.id === selectedPackage)?.name,
+        packagePrice: photographer.packages.find(pkg => pkg.id === selectedPackage)?.price,
+        date: date.toISOString(),
+        formattedDate: format(date, 'dd.MM.yyyy')
+      };
+      
+      sessionStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+      
+      // Navigate to the order information page
+      navigate(`/order-information`);
+      
+      // Show toast notification
+      toast.success("Sesija veiksmīgi rezervēta!", {
+        description: `Jūs izvēlējāties ${photographer.name} pakalpojumu datumā ${format(date, 'dd.MM.yyyy')}`
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -280,6 +332,14 @@ const PhotographerProfile = () => {
                   onSelect={setDate}
                   className="p-3 pointer-events-auto"
                   disabled={(date) => {
+                    // Check if date is in the past
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    
+                    if (date < today) {
+                      return true;
+                    }
+                    
                     // In a real app, we would check against actual availability
                     return !photographer.availability.availableDates.some(
                       availableDate => 
@@ -292,7 +352,7 @@ const PhotographerProfile = () => {
               </div>
               
               {selectedPackage && date ? (
-                <Button className="w-full">
+                <Button className="w-full" onClick={handleBookSession}>
                   Rezervēt Tagad
                 </Button>
               ) : (

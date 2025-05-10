@@ -1,26 +1,83 @@
 
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { toast } from "sonner";
 
 const SignupPage = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const planParam = searchParams.get('plan') || '';
-
-  const [activeTab, setActiveTab] = useState(planParam ? "photographer" : "client");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("user");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const user = localStorage.getItem("user");
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Signup attempt with:", { email, password, name, userType: activeTab });
+    setIsLoading(true);
+
+    // Simple validation
+    if (!name || !email || !password) {
+      toast.error("Lūdzu, aizpildiet visus obligātos laukus");
+      setIsLoading(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error("Paroles nesakrīt");
+      setIsLoading(false);
+      return;
+    }
+
+    // Check if email already exists
+    const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+    const emailExists = existingUsers.some((user: any) => user.email === email);
+
+    if (emailExists) {
+      toast.error("Lietotājs ar šādu e-pastu jau eksistē");
+      setIsLoading(false);
+      return;
+    }
+
+    // Mock registration
+    setTimeout(() => {
+      // Create new user
+      const newUser = {
+        id: Date.now(),
+        name,
+        email,
+        password, // In a real app, this should be hashed
+        role,
+        createdAt: new Date().toISOString()
+      };
+
+      // Add to users list
+      localStorage.setItem("users", JSON.stringify([...existingUsers, newUser]));
+      
+      // Log in the user
+      localStorage.setItem("user", JSON.stringify(newUser));
+      
+      toast.success("Konts veiksmīgi izveidots", {
+        description: `Laipni lūdzam, ${name}!`
+      });
+      
+      navigate("/dashboard");
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
@@ -28,36 +85,15 @@ const SignupPage = () => {
       <div className="container mx-auto px-4 py-12 flex justify-center">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Izveidot kontu</CardTitle>
+            <CardTitle className="text-2xl font-bold">Reģistrēties</CardTitle>
             <CardDescription>
-              Ievadiet savu informāciju, lai izveidotu kontu
+              Izveidojiet kontu, lai sāktu izmantot mūsu pakalpojumus
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs 
-              value={activeTab} 
-              onValueChange={setActiveTab} 
-              className="mb-6"
-            >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="client">Klientam</TabsTrigger>
-                <TabsTrigger value="photographer">Fotogrāfam</TabsTrigger>
-              </TabsList>
-              <TabsContent value="client">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Izveidojiet klientu kontu, lai meklētu un rezervētu fotogrāfus jūsu īpašajiem brīžiem.
-                </p>
-              </TabsContent>
-              <TabsContent value="photographer">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Izveidojiet fotogrāfa kontu, lai sāktu piedāvāt savus pakalpojumus un iegūtu jaunus klientus.
-                </p>
-              </TabsContent>
-            </Tabs>
-
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Pilns vārds</Label>
+                <Label htmlFor="name">Vārds un uzvārds</Label>
                 <Input
                   id="name"
                   placeholder="Jānis Bērziņš"
@@ -82,38 +118,39 @@ const SignupPage = () => {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <p className="text-xs text-muted-foreground">
-                  Parolei jābūt vismaz 8 rakstzīmēm garai.
-                </p>
               </div>
-
-              {activeTab === "photographer" && planParam && (
-                <div className="bg-secondary/40 p-3 rounded-md text-sm">
-                  <p className="font-medium">Izvēlētais plāns: {planParam.charAt(0).toUpperCase() + planParam.slice(1)}</p>
-                  <p className="text-muted-foreground">Jūs varēsiet mainīt vai apstiprināt savu plānu pēc reģistrācijas.</p>
-                </div>
-              )}
-
-              <Button type="submit" className="w-full">
-                Reģistrēties
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Apstiprināt paroli</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label>Es vēlos reģistrēties kā:</Label>
+                <RadioGroup value={role} onValueChange={setRole} className="flex space-x-2">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="user" id="user" />
+                    <Label htmlFor="user">Klients</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="photographer" id="photographer" />
+                    <Label htmlFor="photographer">Fotogrāfs</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+              
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Reģistrējas..." : "Reģistrēties"}
               </Button>
-
-              <p className="text-xs text-center text-muted-foreground">
-                Reģistrējoties jūs piekrītat mūsu{" "}
-                <Link to="/terms" className="text-primary hover:underline">
-                  Noteikumiem un nosacījumiem
-                </Link>{" "}
-                un{" "}
-                <Link to="/privacy" className="text-primary hover:underline">
-                  Privātuma politikai
-                </Link>
-                .
-              </p>
             </form>
 
             <div className="relative my-6">

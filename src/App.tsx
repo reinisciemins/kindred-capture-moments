@@ -18,6 +18,8 @@ import SignupPage from "./pages/SignupPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
 import ForPhotographersPage from "./pages/ForPhotographersPage";
+import OrderInformation from "./pages/OrderInformation";
+import DashboardPage from "./pages/DashboardPage";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,8 @@ const App = () => (
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/for-photographers" element={<ForPhotographersPage />} />
+          <Route path="/order-information" element={<OrderInformation />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -1,20 +1,65 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is already logged in
+    const user = localStorage.getItem("user");
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Login logic would go here
-    console.log("Login attempt with:", { email, password });
+    setIsLoading(true);
+
+    // Mock users for demo purpose
+    const mockUsers = [
+      { email: "janis@piemers.lv", password: "parole123", name: "Jānis Kalniņš", role: "user" },
+      { email: "foto@piemers.lv", password: "parole123", name: "Anna Liepa", role: "photographer" }
+    ];
+
+    // Simple validation
+    if (!email || !password) {
+      toast.error("Lūdzu, ievadiet e-pastu un paroli");
+      setIsLoading(false);
+      return;
+    }
+
+    // Mock authentication
+    setTimeout(() => {
+      const user = mockUsers.find(user => user.email === email && user.password === password);
+      
+      if (user) {
+        // Store user in localStorage
+        localStorage.setItem("user", JSON.stringify(user));
+        
+        toast.success(`Laipni lūdzam, ${user.name}!`, {
+          description: "Veiksmīga pieslēgšanās"
+        });
+        
+        navigate("/dashboard");
+      } else {
+        toast.error("Neizdevās pieslēgties", {
+          description: "Nepareizs e-pasts vai parole"
+        });
+      }
+      
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
@@ -56,9 +101,15 @@ const LoginPage = () => {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Pieslēgties
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Pieslēdzas..." : "Pieslēgties"}
               </Button>
+              
+              <div className="text-sm text-center text-muted-foreground">
+                <p>Testa konti: <br />
+                Lietotājs: janis@piemers.lv / parole123<br />
+                Fotogrāfs: foto@piemers.lv / parole123</p>
+              </div>
             </form>
 
             <div className="relative my-6">
