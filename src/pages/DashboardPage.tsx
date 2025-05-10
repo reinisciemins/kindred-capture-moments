@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout";
@@ -136,9 +135,10 @@ const DashboardPage = () => {
           setBookings(defaultBookings);
         } else {
           // For photographers, create mock booking requests
+          // The fix: Explicitly casting the random status to our allowed types
           const photographerBookings = defaultBookings.map(booking => ({
             ...booking,
-            status: Math.random() > 0.5 ? "pending" : "confirmed"
+            status: Math.random() > 0.5 ? "pending" : "confirmed" as "pending" | "confirmed"
           }));
           localStorage.setItem("bookings", JSON.stringify(photographerBookings));
           setBookings(photographerBookings);
