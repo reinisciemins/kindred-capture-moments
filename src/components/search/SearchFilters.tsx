@@ -51,6 +51,7 @@ interface SearchFiltersProps {
 }
 
 const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions = [] }: SearchFiltersProps) => {
+  // State for form values (used for UI - not immediately applied)
   const [location, setLocation] = useState(initialCriteria?.location || '');
   const [priceRange, setPriceRange] = useState<[number, number]>(initialCriteria?.priceRange || [100, 500]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>(initialCriteria?.type || []);
@@ -95,6 +96,7 @@ const SearchFilters = ({ onSearch, onReset, initialCriteria, locationSuggestions
   };
 
   const handleSearchClick = () => {
+    // Only apply all filters when search button is clicked
     onSearch({
       location,
       type: selectedTypes,

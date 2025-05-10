@@ -4,6 +4,7 @@ import Layout from "@/components/layout/Layout";
 import SearchFilters from "@/components/search/SearchFilters";
 import PhotographerCard from "@/components/search/PhotographerCard";
 import NoResults from "@/components/search/NoResults";
+import SortOptions from "@/components/search/SortOptions";
 
 // Sample photographers data
 const samplePhotographers = [
@@ -113,9 +114,12 @@ const getDateRange = (dateFilter: string): { start: Date | null, end: Date | nul
   return result;
 };
 
+type SortOption = "name-asc" | "name-desc" | "price-low" | "price-high" | "rating-high" | "distance";
+
 const SearchPage = () => {
   const [photographers, setPhotographers] = useState(samplePhotographers);
   const [filteredPhotographers, setFilteredPhotographers] = useState(samplePhotographers);
+  const [sortOption, setSortOption] = useState<SortOption>("rating-high");
   const [searchCriteria, setSearchCriteria] = useState({
     location: "",
     type: [] as string[],
@@ -123,6 +127,53 @@ const SearchPage = () => {
     priceRange: [50, 500] as [number, number],
     rating: "any"
   });
+  
+  // Store unsorted filtered results
+  const [unsortedResults, setUnsortedResults] = useState(samplePhotographers);
+
+  useEffect(() => {
+    // Apply sorting whenever sort option changes
+    sortPhotographers(sortOption, unsortedResults);
+  }, [sortOption, unsortedResults]);
+
+  const sortPhotographers = (option: SortOption, photographers: typeof samplePhotographers) => {
+    let sorted = [...photographers];
+    
+    switch (option) {
+      case "name-asc":
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "name-desc":
+        sorted.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case "price-low":
+        sorted.sort((a, b) => {
+          const priceA = parseInt(a.price.replace(/[^0-9]/g, ''));
+          const priceB = parseInt(b.price.replace(/[^0-9]/g, ''));
+          return priceA - priceB;
+        });
+        break;
+      case "price-high":
+        sorted.sort((a, b) => {
+          const priceA = parseInt(a.price.replace(/[^0-9]/g, ''));
+          const priceB = parseInt(b.price.replace(/[^0-9]/g, ''));
+          return priceB - priceA;
+        });
+        break;
+      case "rating-high":
+        sorted.sort((a, b) => b.rating - a.rating);
+        break;
+      case "distance":
+        // In a real app, this would calculate actual distance
+        // For now, we're just sorting alphabetically by location as a placeholder
+        sorted.sort((a, b) => a.location.localeCompare(b.location));
+        break;
+      default:
+        break;
+    }
+    
+    setFilteredPhotographers(sorted);
+  };
 
   const handleSearch = (criteria: any) => {
     setSearchCriteria(criteria);
@@ -181,7 +232,11 @@ const SearchPage = () => {
       filtered = filtered.filter(photographer => photographer.rating >= ratingValue);
     }
     
-    setFilteredPhotographers(filtered);
+    // Store unsorted results
+    setUnsortedResults(filtered);
+    
+    // Apply sorting to filtered results
+    sortPhotographers(sortOption, filtered);
   };
 
   const resetFilters = () => {
@@ -194,10 +249,15 @@ const SearchPage = () => {
     };
     
     setSearchCriteria(defaultCriteria);
-    setFilteredPhotographers(photographers);
+    setUnsortedResults(photographers);
+    sortPhotographers(sortOption, photographers);
     
     // Return the default criteria so SearchFilters component can reset its state
     return defaultCriteria;
+  };
+
+  const handleSortChange = (option: SortOption) => {
+    setSortOption(option);
   };
 
   return (
@@ -215,6 +275,16 @@ const SearchPage = () => {
             initialCriteria={searchCriteria}
             locationSuggestions={availableLocations} 
           />
+          
+          {filteredPhotographers.length > 0 && (
+            <div className="mb-6">
+              <SortOptions 
+                value={sortOption}
+                onChange={handleSortChange}
+                resultCount={filteredPhotographers.length}
+              />
+            </div>
+          )}
           
           <div className="space-y-6">
             {filteredPhotographers.length > 0 ? filteredPhotographers.map((photographer) => (

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -332,21 +331,10 @@ const PhotographerProfile = () => {
                   onSelect={setDate}
                   className="p-3 pointer-events-auto"
                   disabled={(date) => {
-                    // Check if date is in the past
+                    // Only check if date is in the past
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    
-                    if (date < today) {
-                      return true;
-                    }
-                    
-                    // In a real app, we would check against actual availability
-                    return !photographer.availability.availableDates.some(
-                      availableDate => 
-                        availableDate.getDate() === date.getDate() &&
-                        availableDate.getMonth() === date.getMonth() &&
-                        availableDate.getFullYear() === date.getFullYear()
-                    );
+                    return date < today;
                   }}
                 />
               </div>
